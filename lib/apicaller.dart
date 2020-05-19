@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Home extends StatefulWidget {
   @override
@@ -25,11 +27,40 @@ class _HomeState extends State<Home> {
             style: TextStyle(fontSize: 40),
           ),
           FloatingActionButton(
-            child: Icon(Icons.file_upload),
-            onPressed: null,
+            child: Icon(Icons.filter_drama),
+            onPressed: isLoading ? null : _fetchPost,
           )
         ],
       ),
     );
+  }
+
+  // state related functionality, inline function that sets isLoading
+  setLoading(bool state) => setState(() => isLoading = state); 
+
+  // Async Function
+  _fetchPost() async {
+    try {
+      setLoading(true);
+      await _fetchData();
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+
+  // Fetch Data, Async Function
+  _fetchData() async {
+    final url = 'https://api.adviceslip.com/advice';
+    final response = await http.get(url);
+    dynamic body = json.decode(response.body);
+    if (response.statusCode == 200) {
+      setState(() {
+        _advice = body['slip']['advice'];
+        _intCounter += 1;
+      });
+    } else {
+      print('Failed to get Data!');
+    }
   }
 }
