@@ -15,8 +15,12 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: double.infinity,
+      width: double.infinity,
       padding: EdgeInsets.all(16),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text(
             '$_advice',
@@ -36,15 +40,14 @@ class _HomeState extends State<Home> {
   }
 
   // state related functionality, inline function that sets isLoading
-  setLoading(bool state) => setState(() => isLoading = state); 
+  setLoading(bool state) => setState(() => isLoading = state);
 
   // Async Function
   _fetchPost() async {
     try {
       setLoading(true);
       await _fetchData();
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   }
